@@ -17,24 +17,29 @@ public class ShortestPath {
     public void BreadthFirstSearch(){
         List<Integer> visitedNodes = new ArrayList<>(startNode);
         Queue<Integer> toVisit = new ArrayDeque<>();
-        toVisit.addAll(graph.adjacentNodes(startNode));
         int currentNode = startNode;
-        int previousNode = startNode;
+        visitedNodes.add(currentNode);
+        for (int node : graph.adjacentNodes(startNode)){
+            toVisit.add(node);
+            visitedNodes.add(node);
+            previous.put(node,startNode);
+        }
         while (!toVisit.isEmpty()){
             currentNode = toVisit.poll();
-            visitedNodes.add(currentNode);
-            previous.put(currentNode,previousNode);
             for (int node : graph.adjacentNodes(currentNode)){
-                if (!visitedNodes.contains(node)) toVisit.add(node);
+                if (!visitedNodes.contains(node)) {
+                    toVisit.add(node);
+                    visitedNodes.add(node);
+                    previous.put(node,currentNode);
+                }
             }
-            previousNode = currentNode;
         }
     }
 
     public int getShortestDistance(int destination){
         int distance = 0;
         Integer previousNode = previous.get(destination);
-        while (!previousNode.equals(null)){
+        while (previousNode != null){
             distance += 1;
             previousNode = previous.get(previousNode);
         }

@@ -43,17 +43,10 @@ public class HAL implements Ai {
 //			if (moveScores.get(move) == maxScore) System.out.println(move);
 //		}
 		System.out.println(bestMove);
-		ShortestPath SD = new ShortestPath(bestMove.source(),board.getSetup().graph);
-		SD.BreadthFirstSearch();
-		for (Piece p : board.getPlayers()) {
-			if (p.isDetective()) {
-				Piece.Detective d = (Piece.Detective) p;
-				System.out.println(SD.getShortestDistance(board.getDetectiveLocation(d).get()));
-			}
-		}
 //		System.out.println(maxScore);
 		return bestMove;
 	}
+
 
 	/**
 	 * @param board
@@ -64,30 +57,41 @@ public class HAL implements Ai {
 	 * Type of Move
 	 * etc
 	 */
-
 	public int score(Board board,
 					 Move move){
 		int weight = 0;
 		if (move.getClass() == Move.SingleMove.class){
 			Move.SingleMove m = (Move.SingleMove) move;
-			if (!noDetectives(board,m.destination)) return 0;
-			else weight += 5;
-			if (m.ticket == ScotlandYard.Ticket.SECRET) weight -=1;
+			weight += 5;
+			if (m.ticket == ScotlandYard.Ticket.SECRET) weight -=2;
 			for (int node : board.getSetup().graph.adjacentNodes(m.destination)){
 				if (noDetectives(board,node)) weight += 1;
 			}
+			weight += distanceToDetectives(board, m.destination);
 		} else {
 			Move.DoubleMove m = (Move.DoubleMove) move;
-			if (!noDetectives(board,m.destination1) || !noDetectives(board,m.destination2)) return 0;
-			else weight += 3;
+			weight += 3;
 			if (m.ticket1 == ScotlandYard.Ticket.SECRET || m.ticket2== ScotlandYard.Ticket.SECRET) weight -=1;
 			for (int node : board.getSetup().graph.adjacentNodes(m.destination2)){
 				if (noDetectives(board,node)) weight += 1;
 			};
+			weight += distanceToDetectives(board, m.destination2);
 		}
 		return weight;
 	}
 
+	public int distanceToDetectives(Board board, Integer source){
+		Integer distance = 0;
+		ShortestPath SD = new ShortestPath(source,board.getSetup().graph);
+		SD.BreadthFirstSearch();
+		for (Piece p : board.getPlayers()) {
+			if (p.isDetective()) {
+				Piece.Detective d = (Piece.Detective) p;
+				distance += SD.getShortestDistance(board.getDetectiveLocation(d).get());
+			}
+		}
+		return distance;
+	}
 	public boolean noDetectives(Board board,
 											int destination){
 		for (Piece p : board.getPlayers()){
@@ -99,25 +103,4 @@ public class HAL implements Ai {
 		return true;
 	}
 
-//	public int BFS(int startV, Board board, int detective){
-//		List<Integer> visited = new ArrayList<>();
-//		Queue<Integer> toVisit = new ArrayDeque<>();
-//		Integer currentV = startV;
-//		Integer distance = 0;
-//		visited.add(startV);
-//		toVisit.addAll(board.getSetup().graph.adjacentNodes(startV));
-//		while (currentV != detective){
-//			distance += 1;
-//			currentV = toVisit.poll();
-//			visited.add(currentV);
-//			for (Integer node : board.getSetup().graph.adjacentNodes(currentV)){
-//				if (!visited.contains(node)) toVisit.add(node);
-//			}
-//		}
-//		System.out.println(currentV);
-//		System.out.println(visited);
-//		System.out.println(toVisit);
-//		System.out.println(distance+ "\n");
-//		return 0;
-//	}
 }
