@@ -71,7 +71,7 @@ public class HAL implements Ai {
 		} else {
 			Move.DoubleMove m = (Move.DoubleMove) move;
 			weight += 3;
-			if (m.ticket1 == ScotlandYard.Ticket.SECRET || m.ticket2== ScotlandYard.Ticket.SECRET) weight -=1;
+			if (m.ticket1 == ScotlandYard.Ticket.SECRET || m.ticket2 == ScotlandYard.Ticket.SECRET) weight -=1;
 			for (int node : board.getSetup().graph.adjacentNodes(m.destination2)){
 				if (noDetectives(board,node)) weight += 1;
 			};
