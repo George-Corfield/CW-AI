@@ -10,22 +10,8 @@ import javax.annotation.Nonnull;
 
 public class MrXScore implements ScoreFunction{
 
-//    @Override
-//    @Nonnull
-//    public Move getBestMove(Board board){
-//        ImmutableSet<Move> moves = board.getAvailableMoves();
-//        int maxScore = 0;
-//        Move bestMove = moves.asList().get(0);
-//        for (Move move: moves){
-//            int moveScore = score(board,move);
-//            if (moveScore > maxScore){
-//                maxScore = moveScore;
-//                bestMove = move;
-//            }
-//        }
-//        return bestMove;
-//    }
- //TODO write scores for each individual ticket type, update scoring technique, testing and also write pdf
+
+
     @Override
     @Nonnull
     public Integer score(Board board,

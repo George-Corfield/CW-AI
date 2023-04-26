@@ -8,17 +8,6 @@ import javax.annotation.Nonnull;
 
 public interface ScoreFunction {
 
-
-//    /**
-//     * Computes the best move for all available moves for the given
-//     * player by calling score on each move
-//     *
-//     * @param board
-//     * @return the best available move
-//     */
-//    @Nonnull
-//    Move getBestMove(@Nonnull Board board);
-
     /**
      * Computes the weight for a given move based on:
      * The type of move

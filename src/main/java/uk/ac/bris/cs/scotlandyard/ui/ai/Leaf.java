@@ -4,6 +4,10 @@ import uk.ac.bris.cs.scotlandyard.model.Board.GameState;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 
 
+/**
+ * Leaf inherits from Node
+ */
+
 public class Leaf extends Node{
 
 
