@@ -75,10 +75,10 @@ public class MrXScoreTest extends ParameterisedModelTestBase {
             var secret = secret(MRX,67, 52);
             var mrX = new Player(MRX,defaultMrXTickets(),67);
             Board board = gameStateFactory.build(standard24MoveSetup(),mrX,redPlayer(),greenPlayer(),whitePlayer(),bluePlayer());
-            assertThat(mrXScore.score(board,taxi)).isEqualTo(21);
+            assertThat(mrXScore.score(board,taxi)).isEqualTo(20);
             assertThat(mrXScore.score(board,bus)).isEqualTo(25);
-            assertThat(mrXScore.score(board,underground)).isEqualTo(29);
-            assertThat(mrXScore.score(board,secret)).isEqualTo(20);
+            assertThat(mrXScore.score(board,underground)).isEqualTo(31);
+            assertThat(mrXScore.score(board,secret)).isEqualTo(14);
     }
 
     @Test public void testScoreForDoubleMoves(){
@@ -90,24 +90,24 @@ public class MrXScoreTest extends ParameterisedModelTestBase {
                 Ticket.TAXI,
                 66,
                 Ticket.TAXI,
-                82))).isEqualTo(22);
+                82))).isEqualTo(24);
         assertThat(mrXScore.score(board,x2(MRX,
                 67,
                 Ticket.BUS,
                 102,Ticket.BUS,
-                86))).isEqualTo(23);
+                86))).isEqualTo(25);
         assertThat(mrXScore.score(board,x2(MRX,
                 67,
                 Ticket.UNDERGROUND,
                 111,
                 Ticket.UNDERGROUND,
-                153))).isEqualTo(35);
+                153))).isEqualTo(37);
         assertThat(mrXScore.score(board,x2(MRX,
                 67,
                 Ticket.SECRET,
                 52,
                 Ticket.SECRET,
-                13))).isEqualTo(16);
+                13))).isEqualTo(15);
     }
 
 
