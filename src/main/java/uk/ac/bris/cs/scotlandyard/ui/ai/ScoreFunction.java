@@ -2,6 +2,7 @@ package uk.ac.bris.cs.scotlandyard.ui.ai;
 
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Board;
+import uk.ac.bris.cs.scotlandyard.model.ScotlandYard.Ticket;
 
 import javax.annotation.Nonnull;
 
@@ -33,6 +34,22 @@ public interface ScoreFunction {
      */
     @Nonnull
     Integer getDistanceToOpponent(@Nonnull Board board, @Nonnull Integer source);
+
+    /**
+     *
+     * @param ticket
+     * @return the score for the specific ticket type
+     */
+
+    Integer getScoreForTicket(@Nonnull Ticket ticket);
+
+    /**
+     *
+     * @param board
+     * @param destination
+     * @return the number of available destinations after the move has been made
+     */
+    Integer getPossibilitiesForMove(@Nonnull Board board, @Nonnull Integer destination);
 
 
 

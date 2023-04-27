@@ -4,12 +4,11 @@ import com.google.common.collect.ImmutableSet;
 import uk.ac.bris.cs.scotlandyard.model.Board;
 import uk.ac.bris.cs.scotlandyard.model.Move;
 import uk.ac.bris.cs.scotlandyard.model.Piece;
-import uk.ac.bris.cs.scotlandyard.model.ScotlandYard;
+import uk.ac.bris.cs.scotlandyard.model.ScotlandYard.Ticket;
 
 import javax.annotation.Nonnull;
 
 public class MrXScore implements ScoreFunction{
-
 
 
     @Override
@@ -19,20 +18,14 @@ public class MrXScore implements ScoreFunction{
         int weight = 0;
         if (move.getClass() == Move.SingleMove.class){
             Move.SingleMove m = (Move.SingleMove) move;
-            weight += 5;
-            if (m.ticket == ScotlandYard.Ticket.SECRET) weight -=2;
-            for (int node : board.getSetup().graph.adjacentNodes(m.destination)){
-                if (noDetectives(board,node)) weight += 1;
-            }
             weight += getDistanceToOpponent(board, m.destination);
+            weight += getScoreForTicket(m.ticket);
+            weight += getPossibilitiesForMove(board, m.destination);
         } else {
             Move.DoubleMove m = (Move.DoubleMove) move;
-            weight += 3;
-            if (m.ticket1 == ScotlandYard.Ticket.SECRET || m.ticket2 == ScotlandYard.Ticket.SECRET) weight -=1;
-            for (int node : board.getSetup().graph.adjacentNodes(m.destination2)){
-                if (noDetectives(board,node)) weight += 1;
-            };
-            weight += getDistanceToOpponent(board, m.destination2);
+            weight += getDistanceToOpponent(board,m.destination2);
+            weight += (getScoreForTicket(m.ticket1) + getScoreForTicket(m.ticket2))/2;
+            weight += getPossibilitiesForMove(board, m.destination2);
         }
         return weight;
     }
@@ -58,6 +51,28 @@ public class MrXScore implements ScoreFunction{
             }
         }
         return distance;
+    }
+
+    @Override
+    public Integer getScoreForTicket(Ticket ticket){
+        if (ticket == Ticket.SECRET) {
+            return -5;
+        } else if (ticket == Ticket.BUS) {
+            return 4;
+        } else if (ticket == Ticket.TAXI) {
+            return 2;
+        } else{
+            return 8;
+        }
+    }
+
+    @Override
+    public Integer getPossibilitiesForMove(Board board, Integer destination){
+        Integer possibleMoves = 0;
+        for (int node : board.getSetup().graph.adjacentNodes(destination)){
+            if (noDetectives(board,node)) possibleMoves += 1;
+        }
+        return possibleMoves;
     }
 
     /**

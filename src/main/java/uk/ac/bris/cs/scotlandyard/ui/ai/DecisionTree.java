@@ -137,12 +137,14 @@ public class DecisionTree {
                     Integer location = state.getDetectiveLocation(d).get();
                     Integer optimalDestination = SD.previous.get(location);
                     Boolean moveMade = false;
-                    for (Transport t : Transport.values()){
-                        moveMade = validateMove(moves,state,p,location,t,optimalDestination);
-                        if (moveMade){
-                            state.advance(new SingleMove(p,location,t.requiredTicket(),optimalDestination));
-                            if (!state.getWinner().isEmpty()) return state;
-                            break;
+                    if (optimalDestination != null){
+                        for (Transport t : Transport.values()){
+                            moveMade = validateMove(moves,state,p,location,t,optimalDestination);
+                            if (moveMade){
+                                state.advance(new SingleMove(p,location,t.requiredTicket(),optimalDestination));
+                                if (!state.getWinner().isEmpty()) return state;
+                                break;
+                            }
                         }
                     }
                     if (!moveMade){

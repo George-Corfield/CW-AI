@@ -14,10 +14,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ShortestPathTest extends ParameterisedModelTestBase{
 
     @Test
-    public void testBFSAcrossMap(){
-        ShortestPath SD = new ShortestPath(1,standardGraph());
-        SD.BreadthFirstSearch();
-        assertThat(SD.getShortestDistance(199)).isEqualTo(5);
+    public void testBFS(){
+        ShortestPath SP = new ShortestPath(100,standardGraph());
+        SP.BreadthFirstSearch();
+        assertThat(SP.previous.size()).isEqualTo(198);
+    }
+
+    @Test
+    public void testShortestDistanceAcrossMap(){
+        ShortestPath SP = new ShortestPath(1,standardGraph());
+        SP.BreadthFirstSearch();
+        assertThat(SP.getShortestDistance(199)).isEqualTo(5);
+    }
+
+    @Test
+    public void testShortestDistanceBetween2Nodes(){
+        ShortestPath SP = new ShortestPath(54,standardGraph());
+        SP.BreadthFirstSearch();
+        assertThat(SP.getShortestDistance(36)).isEqualTo(6);
     }
 
 }

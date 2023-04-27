@@ -5,7 +5,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        HALTest.class,
+        DecisionTreeTest.class,
+        ShortestPathTest.class,
+        MrXScoreTest.class,
+        NodeTest.class,
         ShortestPathTest.class
 })
 
