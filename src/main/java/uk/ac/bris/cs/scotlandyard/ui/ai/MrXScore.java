@@ -10,7 +10,14 @@ import javax.annotation.Nonnull;
 
 public class MrXScore implements ScoreFunction{
 
-
+    /**
+     *
+     * @param board
+     * @param move
+     * @return weight for move
+     * deals with single and double moves differently in order to make comparison fairer
+     * uses three different ways to add to the weight in order to give similar moves more spread out scores
+     */
     @Override
     @Nonnull
     public Integer score(Board board,
@@ -53,6 +60,12 @@ public class MrXScore implements ScoreFunction{
         return distance;
     }
 
+    /**
+     *
+     * @param ticket
+     * @return associated value with ticket type
+     */
+
     @Override
     public Integer getScoreForTicket(Ticket ticket){
         if (ticket == Ticket.SECRET) {
@@ -65,6 +78,13 @@ public class MrXScore implements ScoreFunction{
             return 8;
         }
     }
+
+    /**
+     *
+     * @param board
+     * @param destination
+     * @return adjacent nodes to position to give possible locations to move to
+     */
 
     @Override
     public Integer getPossibilitiesForMove(Board board, Integer destination){

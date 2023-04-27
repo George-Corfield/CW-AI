@@ -37,16 +37,20 @@ public class ShortestPath {
     public void BreadthFirstSearch(){
         List<Integer> visitedNodes = new ArrayList<>(startNode);
         Queue<Integer> toVisit = new ArrayDeque<>();
+        //add startNode to visitedNodes
         int currentNode = startNode;
         visitedNodes.add(currentNode);
+        //add all neighbors to toVisit, visitedNodes and add to hashMap with start node as key
         for (int node : graph.adjacentNodes(startNode)){
             toVisit.add(node);
             visitedNodes.add(node);
             previous.put(node,startNode);
         }
+        //loop until toVisit is empty = all nodes visited
         while (!toVisit.isEmpty()){
             currentNode = toVisit.poll();
             for (int node : graph.adjacentNodes(currentNode)){
+                //only add node if not visited
                 if (!visitedNodes.contains(node)) {
                     toVisit.add(node);
                     visitedNodes.add(node);
@@ -65,6 +69,7 @@ public class ShortestPath {
     public int getShortestDistance(int destination){
         int distance = 0;
         Integer previousNode = previous.get(destination);
+        //traceback previous until the startNode as this produces null when attempting to retrieve value
         while (previousNode != null){
             distance += 1;
             previousNode = previous.get(previousNode);

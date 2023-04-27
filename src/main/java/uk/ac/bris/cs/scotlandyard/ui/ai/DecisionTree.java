@@ -84,11 +84,13 @@ public class DecisionTree {
                 List<Move> moves = new ArrayList<>(currentNode.gameState.getAvailableMoves());
                 for (Move move : moves) {
                     GameState nextGameState = currentNode.gameState.advance(move);
+                    //leaf created if mrX wins or at the bottom of the tree
                     if (depth == 1 || !nextGameState.getWinner().isEmpty()) {
                         Leaf newNode = new Leaf(nextGameState, move, false);
                         currentNode.addChildNode(newNode);
                         newNode.setHeuristicValue(new MrXScore().score(nextGameState,move));
                     } else {
+                        //branch created if not at the bottom of the tree
                         Branch newNode = new Branch(nextGameState,move,false);
                         currentNode.addChildNode(newNode);
                         newNode.setHeuristicValue(new MrXScore().score(nextGameState,move));
@@ -96,13 +98,17 @@ public class DecisionTree {
                     }
                 }
             } else {
+                //calculation of optimal detective state
                 GameState newDetectiveState = calculateDetectiveMoves(currentNode.gameState);
+                //new branch created as long as mrX not caught, otherwise leaf created
                 if (newDetectiveState.getWinner().isEmpty()) {
                     Branch newNode = new Branch(newDetectiveState,null,true);
                     currentNode.addChildNode(newNode);
                     createDecisionTreeLevel(newNode, depth - 1, true);
                 } else {
                     Leaf newNode = new Leaf(newDetectiveState,null,false);
+                    //set negative heuristic as only occurs when mrX loses
+                    newNode.setHeuristicValue(-50);
                     currentNode.addChildNode(newNode);
                 }
             }
@@ -125,9 +131,11 @@ public class DecisionTree {
         if (!l.location().isEmpty()){
             mrXLastLocation = l.location().get();
         }
+        //Random Moves calculated if mrX's location is unknown
         if (mrXLastLocation == null){
             state = getRandomMoves(state);
         }else{
+            //get the shortest paths to MrX's last known location
             ShortestPath SD = new ShortestPath(mrXLastLocation,state.getSetup().graph);
             SD.BreadthFirstSearch();
             for (Piece p : state.getPlayers()) {
@@ -138,6 +146,7 @@ public class DecisionTree {
                     Integer optimalDestination = SD.previous.get(location);
                     Boolean moveMade = false;
                     if (optimalDestination != null){
+                        //check if move to the optimal location exists
                         for (Transport t : Transport.values()){
                             moveMade = validateMove(moves,state,p,location,t,optimalDestination);
                             if (moveMade){
@@ -147,6 +156,7 @@ public class DecisionTree {
                             }
                         }
                     }
+                    //if optimal move unavailable, calculate another move
                     if (!moveMade){
                         for (Transport t : Transport.values()){
                             for (Integer destination : state.getSetup().graph.adjacentNodes(location)){
@@ -214,13 +224,16 @@ public class DecisionTree {
         if (depth > 1){
             if (branch.maximisingNode){
                 for (Node n: branch.children){
+                    //continue to traverse down branch
                     if (n.getClass() == Branch.class) minMaxFunction((Branch) n,depth-1);
                 }
+                //finds maximum of children
                 getMaximum(branch);
             }else{
                 for (Node n: branch.children){
                     if (n.getClass() == Branch.class) minMaxFunction((Branch) n,depth-1);
                 }
+                //finds minimum of children
                 getMinimum(branch);
             }
         } else {
